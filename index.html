@@ -81,6 +81,16 @@
         input:hover { border-color: #b8bdc2 }
         input:focus { outline: none; background: #fff; border-color: var(--terra); box-shadow: 0 0 0 4px #b9472926 }
 
+
+        /* e-mail com domínio fixo */
+        .email-group { display: flex; align-items: center; width: 100%; padding: 12px 14px; border: 1.5px solid #d3d7db; border-radius: 8px; background: #fafbfb; cursor: text; font: 16px Calibri, Arial, sans-serif; transition: border-color .2s, box-shadow .25s, background .2s; position: relative; overflow: hidden }
+        .email-group:hover { border-color: #b8bdc2 }
+        .email-group:focus-within { background: #fff; border-color: var(--terra); box-shadow: 0 0 0 4px #b9472926 }
+        .email-group input { width: 8ch; min-width: 0; flex: 0 1 auto; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none }
+        .email-group input:focus, .email-group input:hover { background: transparent; box-shadow: none; border: 0 }
+        .email-group .suffix { flex: none; color: var(--terra); font-weight: 700; white-space: nowrap; user-select: none }
+        .email-group .mirror { position: absolute; visibility: hidden; white-space: pre; pointer-events: none; font: 16px Calibri, Arial, sans-serif }
+
         .actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0 0 }
 
         button {
@@ -173,8 +183,7 @@
                 <span style="color:#555555; font-weight:700;">Cohab</span>
                 <span style="color:#c14423; font-weight:700;">Minas</span>
             </h1>
-            <p>Preencha os dados e exporte a assinatura como JPEG. O telefone celular é opcional e não aparece quando
-                fica vazio.</p>
+            <p>Preencha as informações nos campos abaixo, confira a prévia e exporte sua assinatura institucional da Cohab Minas.</p>
         </header>
         <section class="panel rise" style="--d:1">
             <div class="fields">
@@ -185,10 +194,9 @@
                 <div class="rise" style="--d:5"><label for="telefone">Telefone</label><input id="telefone" value="(31) 3915-XXXX"></div>
                 <div class="rise" style="--d:6"><label for="celular">Celular ou outro telefone (opcional)</label><input id="celular" placeholder="(31) 9XXXX-XXXX">
                 </div>
-                <div class="rise" style="--d:7"><label for="email">E-mail </label><input id="email"
-                        placeholder="Insira seu e-mail (antes do @)"></div>
+                <div class="rise" style="--d:7"><label for="email">E-mail</label><div class="email-group" id="emailGroup"><input id="email" placeholder="nome.sobrenome" autocomplete="off" autocapitalize="off" spellcheck="false"><span class="suffix">@cohab.mg.gov.br</span><span class="mirror" id="emailMirror" aria-hidden="true"></span></div></div>
             </div>
-            <div class="actions rise" style="--d:8"><button id="exportar">Exportar JPEG</button><button class="secondary"
+            <div class="actions rise" style="--d:8"><button id="exportar">Exportar</button><button class="secondary"
                     id="atualizar">Atualizar prévia</button></div>
         </section>
         <section class="panel rise" style="--d:9">
@@ -210,7 +218,7 @@
         function insta(x, y) {ctx.save(); ctx.fillStyle = terr; ctx.beginPath(); ctx.arc(x, y, 34, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = 'white'; ctx.lineWidth = 4; ctx.beginPath(); ctx.roundRect(x - 18, y - 18, 36, 36, 10); ctx.stroke(); ctx.beginPath(); ctx.arc(x, y, 9, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.arc(x + 11, y - 10, 2, 0, Math.PI * 2); ctx.fillStyle = 'white'; ctx.fill(); ctx.restore()}
         function pin(x, y) {ctx.save(); ctx.fillStyle = terr; ctx.beginPath(); ctx.moveTo(x, y + 35); ctx.bezierCurveTo(x - 8, y + 20, x - 26, y + 1, x - 26, y - 12); ctx.arc(x, y - 12, 26, Math.PI, 0); ctx.bezierCurveTo(x + 26, y + 1, x + 8, y + 20, x, y + 35); ctx.fill(); ctx.fillStyle = 'white'; ctx.beginPath(); ctx.arc(x, y - 13, 8, 0, Math.PI * 2); ctx.fill(); ctx.restore()}
         function draw() {
-            ctx.clearRect(0, 0, c.width, c.height); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); const nome = document.getElementById('nome').value.trim() || 'NOME COMPLETO'; const cargo = document.getElementById('cargo').value.trim(); const setor = document.getElementById('setor').value.trim(); const tel = document.getElementById('telefone').value.trim(); const cel = document.getElementById('celular').value.trim(); let email = document.getElementById('email').value.trim(); if (email && !email.includes('@')) email += '@cohab.mg.gov.br';
+            ctx.clearRect(0, 0, c.width, c.height); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); const nome = document.getElementById('nome').value.trim() || 'NOME COMPLETO'; const cargo = document.getElementById('cargo').value.trim(); const setor = document.getElementById('setor').value.trim(); const tel = document.getElementById('telefone').value.trim(); const cel = document.getElementById('celular').value.trim(); let email = document.getElementById('email').value.trim(); email = email.split('@')[0].trim(); if (email) email += '@cohab.mg.gov.br';
             ctx.textBaseline = 'alphabetic'; ctx.fillStyle = terr; ctx.font = 'bold 66px Calibri,Arial,sans-serif'; ctx.fillText(nome.toLocaleUpperCase('pt-BR'), 160, 174, 1040); ctx.fillStyle = gray; ctx.font = 'bold 56px Calibri,Arial,sans-serif'; ctx.fillText(cargo, 160, 280, 1000); ctx.font = '52px Calibri,Arial,sans-serif'; ctx.fillText(setor, 160, cargo ? 348 : 280, 1000);
             ctx.fillStyle = gray; ctx.beginPath(); ctx.roundRect(1260, 198, 8, 280, 4); ctx.fill(); let yy = 268; if (tel) {phoneIcon(1295, 223); ctx.fillStyle = dark; ctx.font = 'bold 42px Calibri,Arial,sans-serif'; ctx.fillText(tel, 1360, 270, 600); yy += 90} if (cel) {phoneIcon(1295, yy - 45); ctx.fillStyle = dark; ctx.font = 'bold 42px Calibri,Arial,sans-serif'; ctx.fillText(cel, 1360, yy, 600); yy += 80} if (email) {emailIcon(1295, yy - 29); ctx.fillStyle = dark; ctx.font = 'bold 38px Calibri,Arial,sans-serif'; ctx.fillText(email, 1360, yy, 620)}
             if (logo.complete && logo.naturalWidth) {ctx.drawImage(logo, 95, 555, 535, 175)} else {ctx.fillStyle = terr; ctx.font = 'bold 40px Calibri'; ctx.fillText('COHAB MINAS', 120, 640)}
@@ -233,6 +241,24 @@
                 t1 = setTimeout(() => toast.classList.remove('show'), 2400);
                 t2 = setTimeout(() => { btn.classList.remove('done'); btn.textContent = label; }, 2400);
             });
+        })();
+    </script>
+
+    <script>
+        (function () {
+            const inp = document.getElementById('email'), grp = document.getElementById('emailGroup'), mir = document.getElementById('emailMirror');
+            function fit() { mir.textContent = inp.value || inp.placeholder; inp.style.width = Math.ceil(mir.getBoundingClientRect().width) + 4 + 'px'; }
+            inp.addEventListener('input', () => { if (inp.value.includes('@')) inp.value = inp.value.split('@')[0]; inp.value = inp.value.replace(/\s/g, ''); fit(); });
+            let locked = false;
+            inp.addEventListener('keydown', e => {
+                if (e.key === '@') { e.preventDefault(); locked = true; return; }
+                if (e.key === 'Backspace' || e.key === 'Delete') { locked = false; return; }
+                if (locked && e.key.length === 1 && !e.ctrlKey && !e.metaKey) e.preventDefault();
+            });
+            inp.addEventListener('blur', () => { locked = false; });
+            grp.addEventListener('mousedown', e => { if (e.target !== inp) { e.preventDefault(); inp.focus(); } });
+            if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+            fit();
         })();
     </script>
 </body>
