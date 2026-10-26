@@ -126,7 +126,7 @@
         @keyframes ping { from { transform: scale(1); opacity: .6 } to { transform: scale(3.2); opacity: 0 } }
 
         .preview {
-            overflow: auto;
+            overflow: hidden;
             background: #fff;
             border: 1px solid var(--line);
             border-radius: 10px;
@@ -136,7 +136,7 @@
         .preview.tick { animation: tick .45s var(--ease) }
         @keyframes tick { 0% { box-shadow: 0 0 0 0 #b9472940 } 100% { box-shadow: 0 0 0 14px #b9472900 } }
 
-        canvas { width: 100%; height: auto; display: block; min-width: 700px }
+        canvas { width: 100%; max-width: 960px; height: auto; display: block; margin: 0 auto }
 
         .note { font-size: 13px; color: var(--muted) }
 
@@ -165,6 +165,7 @@
             .wrap { padding: 22px 12px 8px }
             .panel { padding: 18px }
             .hero { padding-left: 16px }
+            .preview { padding: 4px }
         }
 
         @media (prefers-reduced-motion: reduce) {
