@@ -26,19 +26,12 @@
             margin: 0;
             background: var(--page);
             color: var(--ink);
-            font-family: Calibri, Arial, sans-serif;
+            font-family: Arial, sans-serif;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
         }
 
-        /* fundo: duas formas suaves em movimento lento */
-        .bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden }
-        .bg span { position: absolute; border-radius: 50%; filter: blur(70px); opacity: .5 }
-        .bg span:nth-child(1) { width: 520px; height: 520px; background: #f3c9bb; top: -160px; right: -120px; animation: drift1 22s ease-in-out infinite alternate }
-        .bg span:nth-child(2) { width: 460px; height: 460px; background: #d5dae0; bottom: -180px; left: -140px; animation: drift2 26s ease-in-out infinite alternate }
-        @keyframes drift1 { to { transform: translate(-90px, 70px) scale(1.12) } }
-        @keyframes drift2 { to { transform: translate(110px, -60px) scale(1.08) } }
 
         .wrap { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 40px 24px 16px }
 
@@ -75,7 +68,7 @@
             border-radius: 8px;
             background: #fafbfb;
             color: var(--ink);
-            font: 16px Calibri, Arial, sans-serif;
+            font: 16px Arial, sans-serif;
             transition: border-color .2s, box-shadow .25s, background .2s;
         }
         input::placeholder { color: #a2a7ac }
@@ -84,13 +77,13 @@
 
 
         /* e-mail com domínio fixo */
-        .email-group { display: flex; align-items: center; width: 100%; padding: 12px 14px; border: 1.5px solid #d3d7db; border-radius: 8px; background: #fafbfb; cursor: text; font: 16px Calibri, Arial, sans-serif; transition: border-color .2s, box-shadow .25s, background .2s; position: relative; overflow: hidden }
+        .email-group { display: flex; align-items: center; width: 100%; padding: 12px 14px; border: 1.5px solid #d3d7db; border-radius: 8px; background: #fafbfb; cursor: text; font: 16px Arial, sans-serif; transition: border-color .2s, box-shadow .25s, background .2s; position: relative; overflow: hidden }
         .email-group:hover { border-color: #b8bdc2 }
         .email-group:focus-within { background: #fff; border-color: var(--terra); box-shadow: 0 0 0 4px #b9472926 }
         .email-group input { width: 8ch; min-width: 0; flex: 0 1 auto; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none }
         .email-group input:focus, .email-group input:hover { background: transparent; box-shadow: none; border: 0 }
         .email-group .suffix { flex: none; color: var(--terra); font-weight: 700; white-space: nowrap; user-select: none }
-        .email-group .mirror { position: absolute; visibility: hidden; white-space: pre; pointer-events: none; font: 16px Calibri, Arial, sans-serif }
+        .email-group .mirror { position: absolute; visibility: hidden; white-space: pre; pointer-events: none; font: 16px Arial, sans-serif }
 
         .actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0 0 }
 
@@ -100,7 +93,7 @@
             border: 0;
             border-radius: 8px;
             padding: 13px 22px;
-            font: bold 16px Calibri, Arial, sans-serif;
+            font: bold 16px Arial, sans-serif;
             cursor: pointer;
             background: var(--terra);
             color: #fff;
@@ -143,7 +136,7 @@
 
         footer {
             position: relative; z-index: 1; text-align: center; padding: 22px 12px 30px;
-            font: 13px Calibri, Arial, sans-serif; color: var(--muted)
+            font: 13px Arial, sans-serif; color: var(--muted)
         }
 
         /* aviso de exportação */
@@ -151,7 +144,7 @@
             position: fixed; left: 50%; bottom: 28px; z-index: 10;
             transform: translate(-50%, 24px); opacity: 0; pointer-events: none;
             background: var(--ink); color: #fff; padding: 12px 20px; border-radius: 999px;
-            font: bold 15px Calibri, Arial, sans-serif;
+            font: bold 15px Arial, sans-serif;
             box-shadow: 0 12px 30px -10px #0008;
             transition: opacity .3s, transform .4s var(--ease);
         }
@@ -177,10 +170,9 @@
 </head>
 
 <body>
-    <div class="bg" aria-hidden="true"><span></span><span></span></div>
     <main class="wrap">
         <header class="hero rise" style="--d:0">
-            <h1 style="font-family:Calibri, sans-serif; font-weight:600; color:#000;">
+            <h1 style="font-family:Arial, sans-serif; font-weight:600; color:#000;">
                 Gerador de assinatura
                 <span style="color:#555555; font-weight:700;">Cohab</span>
                 <span style="color:#c14423; font-weight:700;">Minas</span>
@@ -190,11 +182,11 @@
         <section class="panel rise" style="--d:1">
             <div class="fields">
                 <div class="rise" style="--d:2"><label for="nome">Nome completo</label><input id="nome" placeholder="Insira seu nome"></div>
-                <div class="rise" style="--d:3"><label for="cargo">Cargo</label><input id="cargo" placeholder="Insira seu cargo"></div>
-                <div class="rise" style="--d:4"><label for="setor">Setor / função</label><input id="setor"
+                <div class="rise" style="--d:3"><label for="cargo">Cargo / função</label><input id="cargo" placeholder="Insira seu cargo"></div>
+                <div class="rise" style="--d:4"><label for="setor">Setor</label><input id="setor"
                         placeholder="Insira seu setor ou função"></div>
                 <div class="rise" style="--d:5"><label for="telefone">Telefone</label><div class="email-group" id="telGroup"><span class="suffix" style="margin-right:2px">(31) 3915-</span><input id="telefone" placeholder="XXXX" maxlength="4" inputmode="numeric" autocomplete="off" style="width:6ch"></div></div>
-                <div class="rise" style="--d:6"><label for="celular">Celular ou outro telefone (opcional)</label><input id="celular" placeholder="(31) 9XXXX-XXXX">
+                <div class="rise" style="--d:6"><label for="celular">Celular ou outro telefone (opcional)</label><input id="celular" placeholder="(31) 9XXXX-XXXX" inputmode="tel" autocomplete="off">
                 </div>
                 <div class="rise" style="--d:7"><label for="email">E-mail</label><div class="email-group" id="emailGroup"><input id="email" placeholder="nome.sobrenome" autocomplete="off" autocapitalize="off" spellcheck="false"><span class="suffix">@cohab.mg.gov.br</span><span class="mirror" id="emailMirror" aria-hidden="true"></span></div></div>
             </div>
@@ -219,13 +211,15 @@
         function globe(x, y) {ctx.save(); ctx.strokeStyle = terr; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(x, y, 31, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.ellipse(x, y, 14, 31, 0, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x - 28, y - 12); ctx.quadraticCurveTo(x, y - 22, x + 28, y - 12); ctx.moveTo(x - 31, y); ctx.lineTo(x + 31, y); ctx.moveTo(x - 28, y + 12); ctx.quadraticCurveTo(x, y + 22, x + 28, y + 12); ctx.stroke(); ctx.restore()}
         function insta(x, y) {ctx.save(); ctx.fillStyle = terr; ctx.beginPath(); ctx.arc(x, y, 34, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = 'white'; ctx.lineWidth = 4; ctx.beginPath(); ctx.roundRect(x - 18, y - 18, 36, 36, 10); ctx.stroke(); ctx.beginPath(); ctx.arc(x, y, 9, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.arc(x + 11, y - 10, 2, 0, Math.PI * 2); ctx.fillStyle = 'white'; ctx.fill(); ctx.restore()}
         function pin(x, y) {ctx.save(); ctx.fillStyle = terr; ctx.beginPath(); ctx.moveTo(x, y + 35); ctx.bezierCurveTo(x - 8, y + 20, x - 26, y + 1, x - 26, y - 12); ctx.arc(x, y - 12, 26, Math.PI, 0); ctx.bezierCurveTo(x + 26, y + 1, x + 8, y + 20, x, y + 35); ctx.fill(); ctx.fillStyle = 'white'; ctx.beginPath(); ctx.arc(x, y - 13, 8, 0, Math.PI * 2); ctx.fill(); ctx.restore()}
+        function titleCase(v) { return v.replace(/\p{L}[\p{L}\p{M}']*/gu, w => w.charAt(0).toLocaleUpperCase('pt-BR') + w.slice(1).toLocaleLowerCase('pt-BR')); }
+        function onlyPhone(v) { return v.replace(/[^0-9+()\-\s]/g, ''); }
         function draw() {
-            ctx.clearRect(0, 0, c.width, c.height); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); const nome = document.getElementById('nome').value.trim() || 'NOME COMPLETO'; const cargo = document.getElementById('cargo').value.trim(); const setor = document.getElementById('setor').value.trim(); const telD = document.getElementById('telefone').value.replace(/\D/g, '').slice(0, 4); const tel = '(31) 3915-' + (telD || 'XXXX'); const cel = document.getElementById('celular').value.trim(); let email = document.getElementById('email').value.trim(); email = email.split('@')[0].trim(); if (email) email += '@cohab.mg.gov.br';
-            ctx.textBaseline = 'alphabetic'; ctx.fillStyle = terr; ctx.font = 'bold 66px Calibri,Arial,sans-serif'; ctx.fillText(nome.toLocaleUpperCase('pt-BR'), 160, 174, 1040); ctx.fillStyle = gray; ctx.font = 'bold 56px Calibri,Arial,sans-serif'; ctx.fillText(cargo, 160, 280, 1000); ctx.font = '52px Calibri,Arial,sans-serif'; ctx.fillText(setor, 160, cargo ? 348 : 280, 1000);
-            ctx.fillStyle = gray; ctx.beginPath(); ctx.roundRect(1260, 198, 8, 280, 4); ctx.fill(); let yy = 268; if (tel) {phoneIcon(1295, 223); ctx.fillStyle = dark; ctx.font = 'bold 42px Calibri,Arial,sans-serif'; ctx.fillText(tel, 1360, 270, 600); yy += 90} if (cel) {phoneIcon(1295, yy - 45); ctx.fillStyle = dark; ctx.font = 'bold 42px Calibri,Arial,sans-serif'; ctx.fillText(cel, 1360, yy, 600); yy += 80} if (email) {emailIcon(1295, yy - 29); ctx.fillStyle = dark; ctx.font = 'bold 38px Calibri,Arial,sans-serif'; ctx.fillText(email, 1360, yy, 620)}
-            if (logo.complete && logo.naturalWidth) {ctx.drawImage(logo, 95, 555, 535, 175)} else {ctx.fillStyle = terr; ctx.font = 'bold 40px Calibri'; ctx.fillText('COHAB MINAS', 120, 640)}
-            ctx.strokeStyle = '#999'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(660, 610); ctx.lineTo(690, 640); ctx.lineTo(660, 670); ctx.stroke(); globe(890, 641); ctx.fillStyle = gray; ctx.font = 'bold 42px Calibri,Arial,sans-serif'; ctx.fillText('www.cohab.mg.gov.br', 950, 657, 440); insta(1570, 641); ctx.fillStyle = gray; ctx.font = 'bold 42px Calibri,Arial,sans-serif'; ctx.fillText('@cohabmg', 1625, 657, 300);
-            pin(140, 800); ctx.fillStyle = gray; ctx.font = 'bold 47px Calibri,Arial,sans-serif'; ctx.fillText('Rod. Papa Joao Paulo II, 4001 - 14º andar (Prédio Gerais)', 198, 802, 1740); ctx.fillText('Serra Verde - Belo Horizonte, MG - CEP 31630-901', 198, 860, 1740);
+            ctx.clearRect(0, 0, c.width, c.height); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); const nome = document.getElementById('nome').value.trim() || 'NOME COMPLETO'; const cargo = titleCase(document.getElementById('cargo').value.trim()); const setor = titleCase(document.getElementById('setor').value.trim()); const telD = document.getElementById('telefone').value.replace(/\D/g, '').slice(0, 4); const tel = '(31) 3915-' + (telD || 'XXXX'); const cel = onlyPhone(document.getElementById('celular').value).replace(/\s+/g, ' ').trim(); let email = document.getElementById('email').value.trim(); email = email.toLowerCase().replace(/\s/g, '').split('@')[0]; if (email) email += '@cohab.mg.gov.br';
+            ctx.textBaseline = 'alphabetic'; ctx.fillStyle = terr; ctx.font = 'bold 66px Arial,sans-serif'; ctx.fillText(nome.toLocaleUpperCase('pt-BR'), 160, 174, 1040); ctx.fillStyle = gray; ctx.font = 'bold 56px Arial,sans-serif'; ctx.fillText(cargo, 160, 280, 1000); ctx.font = '52px Arial,sans-serif'; ctx.fillText(setor, 160, cargo ? 348 : 280, 1000);
+            ctx.fillStyle = gray; ctx.beginPath(); ctx.roundRect(1260, 198, 8, 280, 4); ctx.fill(); let yy = 268; if (tel) {phoneIcon(1295, 223); ctx.fillStyle = dark; ctx.font = 'bold 42px Arial,sans-serif'; ctx.fillText(tel, 1360, 270, 600); yy += 90} if (cel) {phoneIcon(1295, yy - 45); ctx.fillStyle = dark; ctx.font = 'bold 42px Arial,sans-serif'; ctx.fillText(cel, 1360, yy, 600); yy += 80} if (email) {emailIcon(1295, yy - 29); ctx.fillStyle = dark; ctx.font = 'bold 38px Arial,sans-serif'; ctx.fillText(email, 1360, yy, 620)}
+            if (logo.complete && logo.naturalWidth) {ctx.drawImage(logo, 95, 555, 535, 175)} else {ctx.fillStyle = terr; ctx.font = 'bold 40px Arial,sans-serif'; ctx.fillText('COHAB MINAS', 120, 640)}
+            ctx.strokeStyle = '#999'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(660, 610); ctx.lineTo(690, 640); ctx.lineTo(660, 670); ctx.stroke(); globe(890, 641); ctx.fillStyle = gray; ctx.font = 'bold 42px Arial,sans-serif'; ctx.fillText('www.cohab.mg.gov.br', 950, 657, 440); insta(1570, 641); ctx.fillStyle = gray; ctx.font = 'bold 42px Arial,sans-serif'; ctx.fillText('@cohabmg', 1625, 657, 300);
+            pin(140, 800); ctx.fillStyle = gray; ctx.font = 'bold 47px Arial,sans-serif'; ctx.fillText('Rod. Papa Joao Paulo II, 4001 - 14º andar (Prédio Gerais)', 198, 802, 1740); ctx.fillText('Serra Verde - Belo Horizonte, MG - CEP 31630-901', 198, 860, 1740);
         }
         ['nome', 'cargo', 'setor', 'telefone', 'celular', 'email'].forEach(id => document.getElementById(id).addEventListener('input', draw)); logo.onload = draw; document.getElementById('atualizar').onclick = draw; document.getElementById('exportar').onclick = () => {draw(); const a = document.createElement('a'); a.download = 'assinatura-cohab-minas.jpg'; a.href = c.toDataURL('image/jpeg', 0.95); a.click()}; draw();
     </script>
@@ -250,7 +244,12 @@
         (function () {
             const inp = document.getElementById('email'), grp = document.getElementById('emailGroup'), mir = document.getElementById('emailMirror');
             function fit() { mir.textContent = inp.value || inp.placeholder; inp.style.width = Math.ceil(mir.getBoundingClientRect().width) + 4 + 'px'; }
-            inp.addEventListener('input', () => { if (inp.value.includes('@')) inp.value = inp.value.split('@')[0]; inp.value = inp.value.replace(/\s/g, ''); fit(); });
+            inp.addEventListener('input', () => {
+                const old = inp.value, pos = inp.selectionStart;
+                const nv = old.toLowerCase().replace(/\s/g, '').split('@')[0];
+                if (nv !== old) { inp.value = nv; const np = Math.min(nv.length, old.slice(0, pos).toLowerCase().replace(/\s/g, '').split('@')[0].length); inp.setSelectionRange(np, np); }
+                fit();
+            });
             let locked = false;
             inp.addEventListener('keydown', e => {
                 if (e.key === '@') { e.preventDefault(); locked = true; return; }
@@ -258,6 +257,12 @@
                 if (locked && e.key.length === 1 && !e.ctrlKey && !e.metaKey) e.preventDefault();
             });
             inp.addEventListener('blur', () => { locked = false; });
+            inp.addEventListener('paste', e => {
+                e.preventDefault();
+                const txt = (e.clipboardData || window.clipboardData).getData('text').toLowerCase().replace(/\s/g, '').split('@')[0];
+                inp.setRangeText(txt, inp.selectionStart, inp.selectionEnd, 'end');
+                inp.dispatchEvent(new Event('input', { bubbles: true }));
+            });
             grp.addEventListener('mousedown', e => { if (e.target !== inp) { e.preventDefault(); inp.focus(); } });
             if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
             fit();
@@ -269,6 +274,25 @@
             const t = document.getElementById('telefone'), g = document.getElementById('telGroup');
             t.addEventListener('input', () => { t.value = t.value.replace(/\D/g, '').slice(0, 4); });
             g.addEventListener('mousedown', e => { if (e.target !== t) { e.preventDefault(); t.focus(); } });
+        })();
+    </script>
+
+    <script>
+        (function () {
+            function normalize(el, fn) {
+                const old = el.value, pos = el.selectionStart, nv = fn(old);
+                if (nv !== old) { el.value = nv; const np = fn(old.slice(0, pos)).length; el.setSelectionRange(np, np); }
+            }
+            ['cargo', 'setor'].forEach(id => { const el = document.getElementById(id); el.addEventListener('input', () => normalize(el, titleCase)); });
+            const cel = document.getElementById('celular');
+            cel.addEventListener('input', () => normalize(cel, onlyPhone));
+            const tel = document.getElementById('telefone');
+            tel.addEventListener('paste', e => {
+                e.preventDefault();
+                const d = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
+                tel.value = d.length >= 8 ? d.slice(-4) : d.slice(0, 4);
+                tel.dispatchEvent(new Event('input', { bubbles: true }));
+            });
         })();
     </script>
 </body>
