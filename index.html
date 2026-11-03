@@ -238,8 +238,7 @@
             pin(140, 800); ctx.fillStyle = gray; ctx.font = 'bold 47px Arial,sans-serif'; ctx.fillText('Rod. Papa Joao Paulo II, 4001 - 14º andar (Prédio Gerais)', 198, 802, 1740); ctx.fillText('Serra Verde - Belo Horizonte, MG - CEP 31630-901', 198, 860, 1740);
         }
         ['nome', 'cargo', 'setor', 'telefone', 'celular', 'email'].forEach(id => document.getElementById(id).addEventListener('input', draw)); logo.onload = draw; document.getElementById('limpar').onclick = () => { ['nome', 'cargo', 'setor', 'telefone', 'celular', 'email'].forEach(id => { const el = document.getElementById(id); el.value = ''; el.dispatchEvent(new Event('input', { bubbles: true })); }); document.getElementById('nome').focus(); };
-        function emailSized(w) { const h = Math.round(c.height * w / c.width); const step = (src, tw, th) => { const o = document.createElement('canvas'); o.width = tw; o.height = th; const x = o.getContext('2d'); x.imageSmoothingEnabled = true; x.imageSmoothingQuality = 'high'; x.fillStyle = '#fff'; x.fillRect(0, 0, tw, th); x.drawImage(src, 0, 0, tw, th); return o; }; let cur = c, cw = c.width; while (cw / 2 > w) { cw = Math.round(cw / 2); cur = step(cur, cw, Math.round(c.height * cw / c.width)); } return step(cur, w, h); }
-        document.getElementById('exportar').onclick = () => {draw(); const a = document.createElement('a'); a.download = 'assinatura-cohab-minas.jpg'; a.href = emailSized(640).toDataURL('image/jpeg', 0.95); a.click()}; draw();
+        document.getElementById('exportar').onclick = () => {draw(); const a = document.createElement('a'); a.download = 'assinatura-cohab-minas.jpg'; a.href = c.toDataURL('image/jpeg', 0.95); a.click()}; draw();
     </script>
 
     <script>
