@@ -59,7 +59,14 @@
         .fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px }
 
         label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--gray); transition: color .2s }
-        .fields > div:focus-within label { color: var(--terra) }
+        .fields > div:not(.cargo-row):focus-within label, .cargo-row > .cell:focus-within label { color: var(--terra) }
+        .cargo-row { display: flex; align-items: flex-end; gap: 14px }
+        .cargo-row .cell { min-width: 0 }
+        .cargo-row .cargo-cell { flex: 3 1 0 }
+        .cargo-row .oab-cell { flex: 2 1 0 }
+        .cargo-row .oab-cell label { font-size: 12px }
+        .cargo-row .oab-cell input { font-size: 15px }
+        .cargo-row .oab-cell input::placeholder { font-size: 13px }
 
         input {
             width: 100%;
@@ -187,7 +194,10 @@
         <section class="panel rise" style="--d:1">
             <div class="fields">
                 <div class="rise" style="--d:2"><label for="nome">Nome (preferencialmente nome e sobrenome)</label><input id="nome" placeholder="Insira seu nome"></div>
-                <div class="rise" style="--d:3"><label for="cargo">Função</label><input id="cargo" placeholder="Insira sua função"></div>
+                <div class="rise cargo-row" style="--d:3">
+                    <div class="cell cargo-cell"><label for="cargo">Função</label><input id="cargo" placeholder="Insira sua função"></div>
+                    <div class="cell oab-cell"><label for="oab">OAB/MG N°</label><input id="oab" placeholder="Insira o número da sua OAB" inputmode="text" autocomplete="off" maxlength="10" spellcheck="false"></div>
+                </div>
                 <div class="rise" style="--d:4"><label for="setor">Setor</label><input id="setor"
                         placeholder="Insira seu setor ou função"></div>
                 <div class="rise" style="--d:5"><label for="telefone">Telefone</label><div class="email-group" id="telGroup"><input id="telPrefixo" class="pref" value="(31) 3915-" aria-label="Prefixo do telefone" inputmode="tel" autocomplete="off" maxlength="20" spellcheck="false" style="width:10ch"><input id="telefone" placeholder="XXXX" inputmode="numeric" autocomplete="off" style="width:6ch"><span class="mirror" id="telMirror" aria-hidden="true"></span></div></div>
@@ -220,6 +230,7 @@
         function pin(x, y) {ctx.save(); ctx.fillStyle = terr; ctx.beginPath(); ctx.moveTo(x, y + 35); ctx.bezierCurveTo(x - 8, y + 20, x - 26, y + 1, x - 26, y - 12); ctx.arc(x, y - 12, 26, Math.PI, 0); ctx.bezierCurveTo(x + 26, y + 1, x + 8, y + 20, x, y + 35); ctx.fill(); ctx.fillStyle = 'white'; ctx.beginPath(); ctx.arc(x, y - 13, 8, 0, Math.PI * 2); ctx.fill(); ctx.restore()}
         const PREP = new Set(['de', 'da', 'do', 'em', 'na', 'no', 'ao', 'a', 'o', 'as', 'os', 'e', 'i', 'um', 'uma', 'uns', 'umas']);
         function titleCase(v) { let i = 0; return v.replace(/\p{L}[\p{L}\p{M}']*/gu, w => { const l = w.toLocaleLowerCase('pt-BR'); if (i++ > 0 && (PREP.has(l) || l.length === 1)) return l; return l.charAt(0).toLocaleUpperCase('pt-BR') + l.slice(1); }); }
+        function formatOab(v) { const t = v.toUpperCase().replace(/[^0-9A-Z]/g, ''); return /^\d+$/.test(t) ? t.replace(/\B(?=(\d{3})+$)/g, ' ') : t; }
         function onlyPhone(v) { return v.replace(/[^0-9+()\-\s]/g, ''); }
         function formatPhone(raw) {
             const clean = onlyPhone(raw).replace(/\s+/g, ' ').trim(); const d = clean.replace(/\D/g, '');
@@ -229,8 +240,8 @@
             return '(' + d.slice(0, 2) + ') ' + n;
         }
         function draw() {
-            ctx.clearRect(0, 0, c.width, c.height); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); const nome = document.getElementById('nome').value.trim(); const oy = nome ? 0 : -106; const cargo = titleCase(document.getElementById('cargo').value.trim()); const setor = titleCase(document.getElementById('setor').value.trim()); const telD = document.getElementById('telefone').value.replace(/\D/g, ''); const telP = onlyPhone(document.getElementById('telPrefixo').value).replace(/\s+/g, ' ').trim(); const tel = telD ? telP + (/\)$/.test(telP) ? ' ' : '') + telD : ''; const cel = formatPhone(document.getElementById('celular').value); let email = document.getElementById('email').value.trim(); email = email.toLowerCase().replace(/\s/g, '').split('@')[0]; if (email) email += '@cohab.mg.gov.br';
-            ctx.textBaseline = 'alphabetic'; ctx.fillStyle = terr; const nomeUp = nome.toLocaleUpperCase('pt-BR'); let nomeSize = 66; ctx.font = 'bold 66px Arial,sans-serif'; const nomeW = ctx.measureText(nomeUp).width; if (nomeW > 1728) { nomeSize = 66 * 1728 / nomeW; ctx.font = 'bold ' + nomeSize + 'px Arial,sans-serif'; } if (nome) ctx.fillText(nomeUp, 160, 174); ctx.fillStyle = gray; ctx.font = 'bold 56px Arial,sans-serif'; ctx.fillText(cargo, 160, 280 + oy, 1000); ctx.font = '52px Arial,sans-serif'; ctx.fillText(setor, 160, (cargo ? 348 : 280) + oy, 1000);
+            ctx.clearRect(0, 0, c.width, c.height); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); const nome = document.getElementById('nome').value.trim(); const oy = nome ? 0 : -106; const cargo = titleCase(document.getElementById('cargo').value.trim()); const oabN = formatOab(document.getElementById('oab').value); const cargoTxt = [cargo, oabN ? 'OAB/MG ' + oabN : ''].filter(Boolean).join(' '); const setor = titleCase(document.getElementById('setor').value.trim()); const telD = document.getElementById('telefone').value.replace(/\D/g, ''); const telP = onlyPhone(document.getElementById('telPrefixo').value).replace(/\s+/g, ' ').trim(); const tel = telD ? telP + (/\)$/.test(telP) ? ' ' : '') + telD : ''; const cel = formatPhone(document.getElementById('celular').value); let email = document.getElementById('email').value.trim(); email = email.toLowerCase().replace(/\s/g, '').split('@')[0]; if (email) email += '@cohab.mg.gov.br';
+            ctx.textBaseline = 'alphabetic'; ctx.fillStyle = terr; const nomeUp = nome.toLocaleUpperCase('pt-BR'); let nomeSize = 66; ctx.font = 'bold 66px Arial,sans-serif'; const nomeW = ctx.measureText(nomeUp).width; if (nomeW > 1728) { nomeSize = 66 * 1728 / nomeW; ctx.font = 'bold ' + nomeSize + 'px Arial,sans-serif'; } if (nome) ctx.fillText(nomeUp, 160, 174); ctx.fillStyle = gray; ctx.font = 'bold 56px Arial,sans-serif'; ctx.fillText(cargoTxt, 160, 280 + oy, 1000); ctx.font = '52px Arial,sans-serif'; ctx.fillText(setor, 160, (cargoTxt ? 348 : 280) + oy, 1000);
             const dy = 26, items = []; if (tel) items.push({ k: 'p', t: tel, gap: 88 }); if (cel) items.push({ k: 'p', t: cel, gap: 80 }); if (email) items.push({ k: 'e', t: email, gap: 0 });
             let by = 270 + dy; const pos = items.map(it => { const y0 = by; by += it.gap; return y0 });
             if (items.length) { ctx.fillStyle = gray; ctx.beginPath(); ctx.roundRect(1260, 198 + dy, 8, pos[pos.length - 1] + 40 - (198 + dy), 4); ctx.fill() }
@@ -239,7 +250,7 @@
             ctx.strokeStyle = '#999'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(660, 610); ctx.lineTo(690, 640); ctx.lineTo(660, 670); ctx.stroke(); globe(890, 641); ctx.fillStyle = gray; ctx.font = 'bold 42px Arial,sans-serif'; ctx.fillText('www.cohab.mg.gov.br', 950, 657, 440); insta(1570, 641); ctx.fillStyle = gray; ctx.font = 'bold 42px Arial,sans-serif'; ctx.fillText('@cohabminas', 1625, 657, 380);
             pin(140, 800); ctx.fillStyle = gray; ctx.font = 'bold 47px Arial,sans-serif'; ctx.fillText('Rod. Papa Joao Paulo II, 4001 - 14º andar (Prédio Gerais)', 198, 802, 1740); ctx.fillText('Serra Verde - Belo Horizonte, MG - CEP 31630-901', 198, 860, 1740);
         }
-        ['nome', 'cargo', 'setor', 'telPrefixo', 'telefone', 'celular', 'email'].forEach(id => document.getElementById(id).addEventListener('input', draw)); logo.onload = draw; document.getElementById('limpar').onclick = () => { ['nome', 'cargo', 'setor', 'telPrefixo', 'telefone', 'celular', 'email'].forEach(id => { const el = document.getElementById(id); el.value = id === 'telPrefixo' ? '(31) 3915-' : ''; el.dispatchEvent(new Event('input', { bubbles: true })); }); document.getElementById('nome').focus(); };
+        ['nome', 'cargo', 'oab', 'setor', 'telPrefixo', 'telefone', 'celular', 'email'].forEach(id => document.getElementById(id).addEventListener('input', draw)); logo.onload = draw; document.getElementById('limpar').onclick = () => { ['nome', 'cargo', 'oab', 'setor', 'telPrefixo', 'telefone', 'celular', 'email'].forEach(id => { const el = document.getElementById(id); el.value = id === 'telPrefixo' ? '(31) 3915-' : ''; el.dispatchEvent(new Event('input', { bubbles: true })); }); document.getElementById('nome').focus(); };
         const EXP_W = 1000, EXP_H = 470;
         function exportCanvas() {
             // reduz em etapas (metade por vez) para preservar nitidez; a prévia (canvas 2048x962) não é alterada
@@ -264,7 +275,7 @@
             const prev = document.querySelector('.preview'), btn = document.getElementById('exportar'), toast = document.getElementById('toast');
             const label = btn.textContent; let t1, t2;
             function pulse() { prev.classList.remove('tick'); void prev.offsetWidth; prev.classList.add('tick'); }
-            ['nome', 'cargo', 'setor', 'telPrefixo', 'telefone', 'celular', 'email'].forEach(id => document.getElementById(id).addEventListener('input', pulse));
+            ['nome', 'cargo', 'oab', 'setor', 'telPrefixo', 'telefone', 'celular', 'email'].forEach(id => document.getElementById(id).addEventListener('input', pulse));
             document.getElementById('limpar').addEventListener('click', pulse);
             btn.addEventListener('click', () => {
                 pulse(); btn.classList.add('done'); btn.textContent = 'Baixada ✓'; toast.classList.add('show');
@@ -356,6 +367,12 @@
                 if (nv !== old) { el.value = nv; const np = fn(old.slice(0, pos)).length; el.setSelectionRange(np, np); }
             }
             ['cargo', 'setor'].forEach(id => { const el = document.getElementById(id); el.addEventListener('input', () => normalize(el, titleCase)); });
+            const oab = document.getElementById('oab');
+            oab.addEventListener('input', () => {
+                const old = oab.value, pos = oab.selectionStart;
+                const sig = old.slice(0, pos).toUpperCase().replace(/[^0-9A-Z]/g, '').length, nv = formatOab(old);
+                if (nv !== old) { oab.value = nv; let n = 0, i = 0; while (i < nv.length && n < sig) { if (nv[i] !== ' ') n++; i++; } oab.setSelectionRange(i, i); }
+            });
             const cel = document.getElementById('celular');
             cel.addEventListener('input', () => normalize(cel, onlyPhone));
         })();
