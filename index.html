@@ -164,11 +164,7 @@
             50%, 64% { transform: translateX(calc(var(--dist, 0px) * -1)) }
             100% { transform: translateX(0) }
         }
-        /* OAB: letreiro contínuo em uma só direção */
-        .ph-in.mq { animation: mq var(--dur, 8s) linear infinite }
-        @keyframes mq { from { transform: translateX(0) } to { transform: translateX(calc(var(--unit, 0px) * -1)) } }
         @media (prefers-reduced-motion: reduce) {
-            .ph-in.mq { animation: none !important }
             .ph-in.run { animation: none !important; max-width: 100%; overflow: hidden; text-overflow: ellipsis }
         }
 
@@ -471,24 +467,10 @@
                 const ph = document.createElement('span'); ph.className = 'ph'; ph.setAttribute('aria-hidden', 'true');
                 const inn = document.createElement('span'); inn.className = 'ph-in'; inn.textContent = inp.getAttribute('placeholder') || '';
                 ph.appendChild(inn); w.appendChild(ph);
-                return { ph, inn, mq: inp.id === 'oab', text: inn.textContent };
+                return { ph, inn };
             });
-            // OAB: repete o texto separado por ponto e desloca exatamente uma repetição por ciclo (emenda invisível)
-            function marquee({ ph, inn, text }) {
-                const unit = text.replace(/\.\s*$/, '') + '.\u00a0\u00a0';
-                inn.classList.remove('mq'); inn.textContent = unit;
-                const uw = inn.getBoundingClientRect().width;
-                if (!uw) return;
-                const n = Math.max(2, Math.ceil(ph.clientWidth / uw) + 1);
-                inn.textContent = unit.repeat(n);
-                inn.style.setProperty('--unit', uw + 'px');
-                inn.style.setProperty('--dur', (uw / SPEED) + 's');
-                void inn.offsetWidth; inn.classList.add('mq');
-            }
             function measure() {
-                boxes.forEach(b => {
-                    if (b.mq) { marquee(b); return; }
-                    const { ph, inn } = b;
+                boxes.forEach(({ ph, inn }) => {
                     inn.classList.remove('run');
                     const dist = Math.ceil(inn.scrollWidth - ph.clientWidth);
                     if (dist > 1) {
