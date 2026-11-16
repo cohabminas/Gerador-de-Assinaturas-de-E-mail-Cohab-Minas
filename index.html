@@ -132,6 +132,26 @@
         .dd-opt[aria-selected="true"] .dd-ico { background: var(--terra); color: #fff }
         .dd-opt .dd-check { flex: none; width: 16px; height: 16px; margin-left: 8px; color: var(--terra); opacity: 0 }
         .dd-opt[aria-selected="true"] .dd-check { opacity: 1 }
+        /* telefone adicional */
+        .cel-extra { margin-top: 10px }
+        .cel-extra[hidden] { display: none }
+        button.tel-add, button.tel-remove { box-shadow: none; transform: none }
+        button.tel-add::after, button.tel-remove::after { display: none }
+        button.tel-add {
+            display: inline-flex; align-items: center; margin-top: 8px; padding: 4px 2px; border-radius: 6px;
+            background: none; color: var(--terra); font: bold 14px Arial, sans-serif;
+        }
+        button.tel-add:hover { background: none; color: var(--terra-dark); text-decoration: underline; transform: none; box-shadow: none }
+        button.tel-add[hidden] { display: none }
+        button.tel-remove {
+            flex: none; width: 44px; padding: 0; display: grid; place-items: center; border-radius: 8px;
+            background: #fafbfb; color: var(--muted); border: 1.5px solid #d3d7db;
+        }
+        button.tel-remove svg { width: 14px; height: 14px }
+        button.tel-remove:hover { background: #fff; color: var(--terra); border-color: var(--terra); transform: none; box-shadow: none }
+        .tel-aviso { margin: 8px 0 0; padding: 8px 10px; border-radius: 7px; background: #b9472912; color: var(--terra-dark); font-size: 13px; line-height: 1.4 }
+        .tel-aviso[hidden] { display: none }
+        @media(max-width:650px) { .cel-row .dd-btn .dd-txt b { font-size: 15px } }
         .dd-host.dd-up { position: relative; z-index: 20 }
         .panel.dd-up { position: relative; z-index: 5 }
         input::placeholder { color: #a2a7ac }
@@ -275,7 +295,10 @@
                 <div class="rise" style="--d:4"><label for="setor">Setor</label><input id="setor"
                         placeholder="Insira seu setor ou função"></div>
                 <div class="rise" style="--d:5"><label for="telefone">Telefone</label><div class="email-group" id="telGroup"><input id="telPrefixo" class="pref" value="(31) 3915-" aria-label="Prefixo do telefone" inputmode="tel" autocomplete="off" maxlength="20" spellcheck="false" style="width:10ch"><input id="telefone" placeholder="XXXX" inputmode="numeric" autocomplete="off" style="width:6ch"><span class="mirror" id="telMirror" aria-hidden="true"></span></div></div>
-                <div class="rise" style="--d:6"><label for="celular">Celular ou outro telefone (opcional)</label><div class="cel-row"><input id="celular" placeholder="(31) 9XXXX-XXXX" inputmode="tel" autocomplete="off"><select id="celIcone" aria-label="Ícone do celular na assinatura"><option value="celular" selected>Celular</option><option value="whatsapp">WhatsApp</option></select></div>
+                <div class="rise" style="--d:6"><label for="celular">Celular ou outro telefone (opcional)</label><div class="cel-row"><input id="celular" placeholder="(31) 9XXXX-XXXX" inputmode="tel" autocomplete="off"><select id="celIcone" aria-label="Ícone do primeiro número na assinatura"><option value="telefone" selected>Telefone</option><option value="celular">Celular</option><option value="whatsapp">WhatsApp</option></select></div>
+                    <div class="cel-row cel-extra" id="celExtra" hidden><input id="celular2" placeholder="(31) 9XXXX-XXXX" inputmode="tel" autocomplete="off" aria-label="Telefone adicional"><select id="celIcone2" aria-label="Ícone do telefone adicional na assinatura"><option value="telefone" selected>Telefone</option><option value="celular">Celular</option><option value="whatsapp">WhatsApp</option></select><button type="button" class="tel-remove" id="celRemover" aria-label="Remover telefone adicional" title="Remover telefone adicional"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+                    <button type="button" class="tel-add" id="celAdicionar">+ Adicionar outro telefone</button>
+                    <p class="tel-aviso" id="celAviso" role="status" hidden></p>
                 </div>
                 <div class="rise" style="--d:7"><label for="email">E-mail</label><div class="email-group" id="emailGroup"><input id="email" placeholder="nome.sobrenome" autocomplete="off" autocapitalize="off" spellcheck="false"><span class="suffix">@cohab.mg.gov.br</span><span class="mirror" id="emailMirror" aria-hidden="true"></span></div></div>
                 <div class="rise" style="--d:7"><label for="endereco">Endereço</label><select id="endereco"><option value="cidade-administrativa" data-desc="Rod. Papa João Paulo II, 4001 - Serra Verde - Belo Horizonte" selected>Cidade Administrativa</option><option value="uberlandia" data-desc="Rua dos Pereiras, nº 480 - Centro - Uberlândia">Unidade Uberlândia</option></select></div>
@@ -301,6 +324,13 @@
         function phoneIcon(x, y) { ctx.save(); const k = 2.55; ctx.translate(x + 24 - 12 * k, y + 31 - 12 * k); ctx.scale(k, k); ctx.fillStyle = terr; ctx.fill(new Path2D('M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z')); ctx.restore() }
         const WA_PATH = new Path2D('M3.87 22.83L6.56 21.97L7.19 22.27C9.75 23.50 12.74 23.75 15.50 22.95C19.55 21.79 22.75 18.39 23.66 14.29C24.03 12.62 24.03 10.79 23.66 9.13C23.17 6.96 22.12 5.06 20.51 3.45C17.78 0.72 14.05 -0.47 10.23 0.18C5.59 0.97 1.80 4.60 0.80 9.22C0.64 9.94 0.58 10.50 0.55 11.35C0.48 13.40 0.89 15.22 1.84 17.07L2.20 17.78L1.15 20.91L0.10 24.03L0.64 23.86C0.94 23.77 2.39 23.30 3.87 22.83ZM11.22 21.41C9.81 21.26 8.38 20.77 7.12 20.01L6.87 19.85L5.03 20.44C4.02 20.76 3.19 21.01 3.18 21.00C3.16 20.99 3.42 20.18 3.74 19.21L4.33 17.43L4.09 17.05C3.35 15.92 2.86 14.69 2.62 13.33C2.47 12.51 2.47 10.88 2.62 10.09C3.39 5.87 6.61 2.72 10.82 2.06C11.52 1.95 12.97 1.95 13.65 2.06C16.86 2.57 19.53 4.51 20.96 7.37C21.66 8.77 21.97 10.10 21.97 11.71C21.97 13.60 21.50 15.27 20.52 16.85C18.56 20.00 14.90 21.80 11.22 21.41ZM16.00 17.50C16.58 17.41 17.41 16.97 17.79 16.56C18.21 16.10 18.47 14.91 18.20 14.66C18.08 14.55 16.06 13.47 15.71 13.32C15.32 13.17 15.26 13.20 14.82 13.73C14.17 14.50 13.92 14.74 13.76 14.74C13.57 14.74 12.71 14.31 12.15 13.94C11.24 13.33 10.60 12.68 9.94 11.69C9.48 11.00 9.37 10.78 9.41 10.62C9.43 10.55 9.61 10.32 9.82 10.10C10.23 9.67 10.46 9.31 10.46 9.11C10.46 8.96 9.57 6.51 9.43 6.28C9.30 6.07 9.12 6.02 8.56 6.00C7.94 5.99 7.80 6.06 7.31 6.56C6.70 7.21 6.41 7.96 6.41 8.86C6.41 9.92 6.73 10.76 7.71 12.24C9.52 14.98 11.24 16.33 14.20 17.32C15.00 17.59 15.26 17.61 16.00 17.50Z');
         function whatsIcon(x, y) { ctx.save(); const k = 2.1; ctx.translate(x + 24 - 12 * k, y + 31 - 12 * k); ctx.scale(k, k); ctx.fillStyle = terr; ctx.fill(WA_PATH, 'evenodd'); ctx.restore() }
+        const MOBILE_PATH = new Path2D('M17 1.01 7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z');
+        function mobileIcon(x, y) { ctx.save(); const k = 2.15; ctx.translate(x + 24 - 12 * k, y + 31 - 12 * k); ctx.scale(k, k); ctx.fillStyle = terr; ctx.fill(MOBILE_PATH, 'evenodd'); ctx.restore() }
+        const ICON_KIND = { telefone: 'p', celular: 'm', whatsapp: 'w' };
+        function contactIcon(k, x, y) { if (k === 'w') whatsIcon(x, y); else if (k === 'm') mobileIcon(x, y); else phoneIcon(x, y); }
+        // limites da área de contatos (canvas 2048 x 962): a linha do site/Instagram começa em y = 607
+        const CONTACT_BOTTOM = 589, CONTACT_RIGHT = 1990;
+        let extraPhoneStatus = 'none';
         const ENDERECOS = {
             'cidade-administrativa': ['Rod. Papa Joao Paulo II, 4001 - 14º andar (Prédio Gerais)', 'Serra Verde - Belo Horizonte, MG - CEP 31630-901'],
             'uberlandia': ['Rua dos Pereiras, nº 480 - Centro', 'Uberlândia/MG - CEP: 38400-612']
@@ -323,18 +353,66 @@
         function draw() {
             ctx.clearRect(0, 0, c.width, c.height); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); const nome = document.getElementById('nome').value.trim(); const oy = nome ? 0 : -106; const cargo = titleCase(document.getElementById('cargo').value.trim()); const oabN = formatOab(document.getElementById('oab').value); const setor = titleCase(document.getElementById('setor').value.trim()); const telD = document.getElementById('telefone').value.replace(/\D/g, ''); const telP = onlyPhone(document.getElementById('telPrefixo').value).replace(/\s+/g, ' ').trim(); const tel = telD ? telP + (/\)$/.test(telP) ? ' ' : '') + telD : ''; const cel = formatPhone(document.getElementById('celular').value); let email = document.getElementById('email').value.trim(); email = email.toLowerCase().replace(/\s/g, '').split('@')[0]; if (email) email += '@cohab.mg.gov.br';
             ctx.textBaseline = 'alphabetic'; ctx.fillStyle = terr; const nomeUp = nome.toLocaleUpperCase('pt-BR'); let nomeSize = 66; ctx.font = 'bold 66px Arial,sans-serif'; const nomeW = ctx.measureText(nomeUp).width; if (nomeW > 1728) { nomeSize = 66 * 1728 / nomeW; ctx.font = 'bold ' + nomeSize + 'px Arial,sans-serif'; } if (nome) ctx.fillText(nomeUp, 160, 174); 
-            const dy = 26, items = []; if (tel) items.push({ k: 'p', t: tel, gap: 88 }); if (cel) items.push({ k: document.getElementById('celIcone').value === 'whatsapp' ? 'w' : 'p', t: cel, gap: 80 }); if (email) items.push({ k: 'e', t: email, gap: 0 });
-            let by = 270 + dy; const pos = items.map(it => { const y0 = by; by += it.gap; return y0 });
-            if (items.length) { ctx.fillStyle = gray; ctx.beginPath(); ctx.roundRect(1260, 198 + dy, 8, pos[pos.length - 1] + 40 - (198 + dy), 4); ctx.fill() }
+            // números: o primeiro preenchido ocupa a posição original; o segundo só entra se couber
+            const extraOn = !document.getElementById('celExtra').hidden;
+            const phones = [{ t: cel, k: ICON_KIND[document.getElementById('celIcone').value] || 'p' }];
+            if (extraOn) phones.push({ t: formatPhone(document.getElementById('celular2').value), k: ICON_KIND[document.getElementById('celIcone2').value] || 'p' });
+            const filled = phones.filter(ph => ph.t);
+            const dy = 26, top = 198 + dy;
+            function layout(list) { let by = 270 + dy; return list.map(it => { const y0 = by; by += it.gap; return y0 }); }
+            function build(phs, rowPair) {
+                const list = []; if (tel) list.push({ k: 'p', t: tel, gap: 88 });
+                if (rowPair) list.push({ k: 'pair', a: phs[0], b: phs[1], gap: 80 }); else phs.forEach(ph => list.push({ k: ph.k, t: ph.t, gap: 80 }));
+                if (email) list.push({ k: 'e', t: email, gap: 0 }); return list;
+            }
+            const base = build(filled.slice(0, 1), false), basePos = layout(base);
+            let items = base, pos = basePos; extraPhoneStatus = filled.length > 1 ? 'hidden' : 'none';
+            if (filled.length > 1) {
+                const vert = build(filled, false), vPos = layout(vert);
+                if (vPos[vPos.length - 1] + 40 <= CONTACT_BOTTOM) { items = vert; pos = vPos; extraPhoneStatus = 'ok'; }
+                else {
+                    // alternativa compacta: os dois números lado a lado, na mesma linha, sem reduzir a fonte
+                    ctx.font = 'bold 42px Arial,sans-serif';
+                    const w = ctx.measureText(filled[0].t).width + 65 + 40 + 65 + ctx.measureText(filled[1].t).width;
+                    if (1360 - 65 + w <= CONTACT_RIGHT) { items = build(filled, true); pos = layout(items); extraPhoneStatus = 'ok'; }
+                }
+            }
+            if (items.length) { ctx.fillStyle = gray; ctx.beginPath(); ctx.roundRect(1260, top, 8, pos[pos.length - 1] + 40 - top, 4); ctx.fill() }
             const lines = []; if (cargo) lines.push({ t: cargo, f: 'bold 56px Arial,sans-serif' }); if (oabN) lines.push({ t: 'OAB/MG ' + oabN, f: 'bold 56px Arial,sans-serif' }); if (setor) lines.push({ t: setor, f: '52px Arial,sans-serif' });
-            let ly = 280 + oy; if (items.length && lines.length) { const barC = ((198 + dy) + (pos[pos.length - 1] + 40)) / 2, blkC = ((ly - 40) + (ly + 68 * (lines.length - 1))) / 2; ly += Math.max(0, Math.round(barC - blkC)); }
+            // o bloco da esquerda segue a composição original (sem o número adicional), para não se deslocar
+            let ly = 280 + oy; if (base.length && lines.length) { const barC = (top + (basePos[basePos.length - 1] + 40)) / 2, blkC = ((ly - 40) + (ly + 68 * (lines.length - 1))) / 2; ly += Math.max(0, Math.round(barC - blkC)); }
             ctx.fillStyle = gray; lines.forEach((l, i) => { ctx.font = l.f; ctx.fillText(l.t, 160, ly + 68 * i, 1000); });
-            items.forEach((it, i) => { const y0 = pos[i]; ctx.fillStyle = dark; if (it.k === 'p' || it.k === 'w') { if (it.k === 'w') whatsIcon(1295, y0 - 46); else phoneIcon(1295, y0 - 46); ctx.font = 'bold 42px Arial,sans-serif'; ctx.fillText(it.t, 1360, y0, 600) } else { emailIcon(1295, y0 - 29); ctx.font = 'bold 38px Arial,sans-serif'; ctx.fillText(it.t, 1360, y0, 620) } });
+            items.forEach((it, i) => {
+                const y0 = pos[i]; ctx.fillStyle = dark;
+                if (it.k === 'e') { emailIcon(1295, y0 - 29); ctx.font = 'bold 38px Arial,sans-serif'; ctx.fillText(it.t, 1360, y0, 620); return; }
+                ctx.font = 'bold 42px Arial,sans-serif';
+                if (it.k === 'pair') {
+                    contactIcon(it.a.k, 1295, y0 - 46); ctx.fillStyle = dark; ctx.fillText(it.a.t, 1360, y0);
+                    const x2 = 1360 + ctx.measureText(it.a.t).width + 40;
+                    contactIcon(it.b.k, x2, y0 - 46); ctx.fillStyle = dark; ctx.fillText(it.b.t, x2 + 65, y0);
+                    return;
+                }
+                contactIcon(it.k, 1295, y0 - 46); ctx.fillStyle = dark; ctx.fillText(it.t, 1360, y0, 600);
+            });
+            const aviso = document.getElementById('celAviso');
+            if (aviso) {
+                aviso.hidden = extraPhoneStatus !== 'hidden';
+                aviso.textContent = extraPhoneStatus === 'hidden' ? 'Não há espaço suficiente na assinatura para o telefone adicional. Ele não será exibido para preservar o layout.' : '';
+            }
             if (logo.complete && logo.naturalWidth) {ctx.drawImage(logo, 95, 555, 535, 175)} else {ctx.fillStyle = terr; ctx.font = 'bold 40px Arial,sans-serif'; ctx.fillText('COHAB MINAS', 120, 640)}
             ctx.strokeStyle = '#999'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(660, 610); ctx.lineTo(690, 640); ctx.lineTo(660, 670); ctx.stroke(); globe(890, 641); ctx.fillStyle = gray; ctx.font = 'bold 42px Arial,sans-serif'; ctx.fillText('www.cohab.mg.gov.br', 950, 657, 440); insta(1570, 641); ctx.fillStyle = gray; ctx.font = 'bold 42px Arial,sans-serif'; ctx.fillText('@cohabminas', 1625, 657, 380);
             pin(140, 800); ctx.fillStyle = gray; ctx.font = 'bold 47px Arial,sans-serif'; const end = ENDERECOS[document.getElementById('endereco').value] || ENDERECOS['cidade-administrativa']; ctx.fillText(end[0], 198, 802, 1740); ctx.fillText(end[1], 198, 860, 1740);
         }
-        ['nome', 'cargo', 'oab', 'setor', 'telPrefixo', 'telefone', 'celular', 'email'].forEach(id => document.getElementById(id).addEventListener('input', draw)); ['endereco', 'celIcone'].forEach(id => { const el = document.getElementById(id); el.addEventListener('input', draw); el.addEventListener('change', draw); }); logo.onload = draw; document.getElementById('limpar').onclick = () => { ['nome', 'cargo', 'oab', 'setor', 'telPrefixo', 'telefone', 'celular', 'email'].forEach(id => { const el = document.getElementById(id); el.value = id === 'telPrefixo' ? '(31) 3915-' : ''; el.dispatchEvent(new Event('input', { bubbles: true })); }); ['endereco', 'celIcone'].forEach(id => { const el = document.getElementById(id); el.selectedIndex = 0; el.dispatchEvent(new Event('change', { bubbles: true })); }); draw(); document.getElementById('nome').focus(); };
+        ['nome', 'cargo', 'oab', 'setor', 'telPrefixo', 'telefone', 'celular', 'celular2', 'email'].forEach(id => document.getElementById(id).addEventListener('input', draw)); ['endereco', 'celIcone', 'celIcone2'].forEach(id => { const el = document.getElementById(id); el.addEventListener('input', draw); el.addEventListener('change', draw); }); logo.onload = draw; document.getElementById('limpar').onclick = () => { setExtra(false); ['nome', 'cargo', 'oab', 'setor', 'telPrefixo', 'telefone', 'celular', 'celular2', 'email'].forEach(id => { const el = document.getElementById(id); el.value = id === 'telPrefixo' ? '(31) 3915-' : ''; el.dispatchEvent(new Event('input', { bubbles: true })); }); ['endereco', 'celIcone', 'celIcone2'].forEach(id => { const el = document.getElementById(id); el.selectedIndex = 0; el.dispatchEvent(new Event('change', { bubbles: true })); }); draw(); document.getElementById('nome').focus(); };
+        // adicionar / remover o telefone adicional (no máximo um)
+        function setExtra(on) {
+            const row = document.getElementById('celExtra'), add = document.getElementById('celAdicionar'), inp = document.getElementById('celular2');
+            row.hidden = !on; add.hidden = on;
+            if (!on) { inp.value = ''; const s2 = document.getElementById('celIcone2'); s2.selectedIndex = 0; s2.dispatchEvent(new Event('change', { bubbles: true })); }
+            draw();
+        }
+        document.getElementById('celAdicionar').addEventListener('click', () => { setExtra(true); document.getElementById('celular2').focus(); });
+        document.getElementById('celRemover').addEventListener('click', () => { setExtra(false); document.getElementById('celAdicionar').focus(); });
         const EXP_W = 1000, EXP_H = 470;
         function exportCanvas() {
             // reduz em etapas (metade por vez) para preservar nitidez; a prévia (canvas 2048x962) não é alterada
@@ -359,8 +437,9 @@
             const prev = document.querySelector('.preview'), btn = document.getElementById('exportar'), toast = document.getElementById('toast');
             const label = btn.textContent; let t1, t2;
             function pulse() { prev.classList.remove('tick'); void prev.offsetWidth; prev.classList.add('tick'); }
-            ['nome', 'cargo', 'oab', 'setor', 'telPrefixo', 'telefone', 'celular', 'email'].forEach(id => document.getElementById(id).addEventListener('input', pulse));
-            ['endereco', 'celIcone'].forEach(id => document.getElementById(id).addEventListener('change', pulse));
+            ['nome', 'cargo', 'oab', 'setor', 'telPrefixo', 'telefone', 'celular', 'celular2', 'email'].forEach(id => document.getElementById(id).addEventListener('input', pulse));
+            ['celAdicionar', 'celRemover'].forEach(id => document.getElementById(id).addEventListener('click', pulse));
+            ['endereco', 'celIcone', 'celIcone2'].forEach(id => document.getElementById(id).addEventListener('change', pulse));
             document.getElementById('limpar').addEventListener('click', pulse);
             btn.addEventListener('click', () => {
                 pulse(); btn.classList.add('done'); btn.textContent = 'Baixada ✓'; toast.classList.add('show');
@@ -454,13 +533,15 @@
             ['cargo', 'setor'].forEach(id => { const el = document.getElementById(id); el.addEventListener('input', () => normalize(el, titleCase)); });
             const cel = document.getElementById('celular');
             cel.addEventListener('input', () => normalize(cel, onlyPhone));
+            const cel2 = document.getElementById('celular2');
+            cel2.addEventListener('input', () => normalize(cel2, onlyPhone));
         })();
     </script>
 
     <script>
         (function () {
             const SPEED = 22; // px por segundo
-            const els = ['nome', 'cargo', 'oab', 'setor', 'celular'].map(id => document.getElementById(id));
+            const els = ['nome', 'cargo', 'oab', 'setor', 'celular', 'celular2'].map(id => document.getElementById(id));
             const boxes = els.map(inp => {
                 const w = document.createElement('div'); w.className = 'phw';
                 inp.parentNode.insertBefore(w, inp); w.appendChild(inp);
@@ -491,7 +572,8 @@
         /* menus suspensos com ícones (o <select> original continua sendo a fonte do valor) */
         (function () {
             const ICONS = {
-                celular: '<svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>',
+                telefone: '<svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>',
+                celular: '<svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M17 1.01 7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>',
                 whatsapp: '<svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M3.87 22.83L6.56 21.97L7.19 22.27C9.75 23.50 12.74 23.75 15.50 22.95C19.55 21.79 22.75 18.39 23.66 14.29C24.03 12.62 24.03 10.79 23.66 9.13C23.17 6.96 22.12 5.06 20.51 3.45C17.78 0.72 14.05 -0.47 10.23 0.18C5.59 0.97 1.80 4.60 0.80 9.22C0.64 9.94 0.58 10.50 0.55 11.35C0.48 13.40 0.89 15.22 1.84 17.07L2.20 17.78L1.15 20.91L0.10 24.03L0.64 23.86C0.94 23.77 2.39 23.30 3.87 22.83ZM11.22 21.41C9.81 21.26 8.38 20.77 7.12 20.01L6.87 19.85L5.03 20.44C4.02 20.76 3.19 21.01 3.18 21.00C3.16 20.99 3.42 20.18 3.74 19.21L4.33 17.43L4.09 17.05C3.35 15.92 2.86 14.69 2.62 13.33C2.47 12.51 2.47 10.88 2.62 10.09C3.39 5.87 6.61 2.72 10.82 2.06C11.52 1.95 12.97 1.95 13.65 2.06C16.86 2.57 19.53 4.51 20.96 7.37C21.66 8.77 21.97 10.10 21.97 11.71C21.97 13.60 21.50 15.27 20.52 16.85C18.56 20.00 14.90 21.80 11.22 21.41ZM16.00 17.50C16.58 17.41 17.41 16.97 17.79 16.56C18.21 16.10 18.47 14.91 18.20 14.66C18.08 14.55 16.06 13.47 15.71 13.32C15.32 13.17 15.26 13.20 14.82 13.73C14.17 14.50 13.92 14.74 13.76 14.74C13.57 14.74 12.71 14.31 12.15 13.94C11.24 13.33 10.60 12.68 9.94 11.69C9.48 11.00 9.37 10.78 9.41 10.62C9.43 10.55 9.61 10.32 9.82 10.10C10.23 9.67 10.46 9.31 10.46 9.11C10.46 8.96 9.57 6.51 9.43 6.28C9.30 6.07 9.12 6.02 8.56 6.00C7.94 5.99 7.80 6.06 7.31 6.56C6.70 7.21 6.41 7.96 6.41 8.86C6.41 9.92 6.73 10.76 7.71 12.24C9.52 14.98 11.24 16.33 14.20 17.32C15.00 17.59 15.26 17.61 16.00 17.50Z"/></svg>',
                 'cidade-administrativa': '<svg viewBox="0 0 24 24"><path d="M12 2 2 7v2h20V7L12 2zm-7 9v7h2.5v-7H5zm5.25 0v7h3.5v-7h-3.5zm6.25 0v7H19v-7h-2.5zM2 20v2h20v-2H2z"/></svg>',
                 uberlandia: '<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>'
@@ -564,6 +646,7 @@
             }
             enhance(document.getElementById('endereco'), { descInButton: false });
             enhance(document.getElementById('celIcone'), { descInButton: false });
+            enhance(document.getElementById('celIcone2'), { descInButton: false });
         })();
     </script>
 </body>
