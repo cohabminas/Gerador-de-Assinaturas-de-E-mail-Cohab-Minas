@@ -125,6 +125,7 @@
             opacity: 0; transform: translateY(-6px); pointer-events: none; transition: opacity .18s, transform .25s var(--ease);
         }
         .cel-row .dd-list { left: auto; right: 0; width: max-content }
+        .dd-list { width: max-content; max-width: min(520px, 90vw) }
         .dd.open .dd-list { opacity: 1; transform: none; pointer-events: auto }
         .dd-opt { display: flex; align-items: center; gap: 10px; padding: 9px 12px 9px 8px; border-radius: 7px; cursor: pointer; transition: background .15s }
         .dd-opt.active { background: #f3f4f5 }
@@ -277,7 +278,7 @@
                 <div class="rise" style="--d:6"><label for="celular">Celular ou outro telefone (opcional)</label><div class="cel-row"><input id="celular" placeholder="(31) 9XXXX-XXXX" inputmode="tel" autocomplete="off"><select id="celIcone" aria-label="Ícone do celular na assinatura"><option value="celular" selected>Celular</option><option value="whatsapp">WhatsApp</option></select></div>
                 </div>
                 <div class="rise" style="--d:7"><label for="email">E-mail</label><div class="email-group" id="emailGroup"><input id="email" placeholder="nome.sobrenome" autocomplete="off" autocapitalize="off" spellcheck="false"><span class="suffix">@cohab.mg.gov.br</span><span class="mirror" id="emailMirror" aria-hidden="true"></span></div></div>
-                <div class="rise full" style="--d:7"><label for="endereco">Endereço</label><select id="endereco"><option value="cidade-administrativa" data-desc="Rod. Papa João Paulo II, 4001 - Serra Verde - Belo Horizonte" selected>Cidade Administrativa</option><option value="uberlandia" data-desc="Rua dos Pereiras, nº 480 - Centro - Uberlândia">Unidade Uberlândia</option></select></div>
+                <div class="rise" style="--d:7"><label for="endereco">Endereço</label><select id="endereco"><option value="cidade-administrativa" data-desc="Rod. Papa João Paulo II, 4001 - Serra Verde - Belo Horizonte" selected>Cidade Administrativa</option><option value="uberlandia" data-desc="Rua dos Pereiras, nº 480 - Centro - Uberlândia">Unidade Uberlândia</option></select></div>
             </div>
             <div class="actions rise" style="--d:8"><button id="exportar">Baixar assinatura</button><button class="secondary" id="limpar">Limpar</button></div>
         </section>
@@ -561,7 +562,7 @@
                 document.addEventListener('mousedown', e => { if (!wrap.contains(e.target)) close(); });
                 const api = { close }; all.push(api); render();
             }
-            enhance(document.getElementById('endereco'), { descInButton: true });
+            enhance(document.getElementById('endereco'), { descInButton: false });
             enhance(document.getElementById('celIcone'), { descInButton: false });
         })();
     </script>
