@@ -143,6 +143,13 @@
         .dd-opt[aria-selected="true"] .dd-ico { background: var(--terra); color: #fff }
         .dd-opt .dd-check { flex: none; width: 16px; height: 16px; margin-left: 8px; color: var(--terra); opacity: 0 }
         .dd-opt[aria-selected="true"] .dd-check { opacity: 1 }
+        /* Telefone principal: base editável + final separado */
+        .tel-parts { display: grid; grid-template-columns: minmax(210px, 1.8fr) auto minmax(110px, 1fr); gap: 10px; width: 100%; align-items: center }
+        .tel-part { min-width: 0 }
+        .tel-part input { width: 100%; padding: 12px 12px; color: var(--terra); font-weight: 700; text-align: center; font-variant-numeric: tabular-nums }
+        .tel-part input::placeholder { color: #9fa5aa; font-weight: 400 }
+        .tel-sep { color: var(--terra); font: bold 28px Arial,sans-serif; line-height: 1; align-self: center; transform: translateY(1px) }
+        @media (max-width: 380px) { .tel-parts { gap: 6px } .tel-part input { padding-left: 7px; padding-right: 7px } .tel-sep { font-size: 24px } }
         /* telefone adicional */
         .cel-extra { margin-top: 10px }
         .cel-extra[hidden] { display: none }
@@ -305,7 +312,7 @@
                 </div>
                 <div class="rise" style="--d:4"><label for="setor">Setor</label><input id="setor"
                         placeholder="Insira seu setor ou função"></div>
-                <div class="rise" style="--d:5"><label for="telefone">Telefone</label><div class="email-group" id="telGroup"><input id="telPrefixo" class="pref" value="(31) 3915-" aria-label="Prefixo do telefone" inputmode="tel" autocomplete="off" maxlength="20" spellcheck="false" style="width:10ch"><input id="telefone" placeholder="XXXX" inputmode="numeric" maxlength="4" autocomplete="off" style="width:6ch"><span class="mirror" id="telMirror" aria-hidden="true"></span></div></div>
+                <div class="rise" style="--d:5"><label for="telBase">Telefone</label><div class="tel-parts" id="telGroup"><div class="tel-part tel-base"><input id="telBase" value="(31) 3915" placeholder="(31) 3915" aria-label="DDD e quatro primeiros dígitos do telefone" inputmode="tel" autocomplete="off"></div><span class="tel-sep" aria-hidden="true">-</span><div class="tel-part tel-final"><input id="telefone" placeholder="XXXX" aria-label="Quatro últimos dígitos do telefone" inputmode="numeric" maxlength="4" autocomplete="off"></div></div></div>
                 <div class="rise" style="--d:6"><label for="celular">Celular ou outro telefone (opcional)</label><div class="cel-row"><input id="celular" placeholder="(31) 9XXXX-XXXX" inputmode="tel" autocomplete="off"><select id="celIcone" aria-label="Ícone do primeiro número na assinatura"><option value="telefone" selected>Telefone</option><option value="celular">Celular</option><option value="whatsapp">WhatsApp</option></select></div>
                     <div class="cel-row cel-extra" id="celExtra" hidden><input id="celular2" placeholder="(31) 9XXXX-XXXX" inputmode="tel" autocomplete="off" aria-label="Telefone adicional"><select id="celIcone2" aria-label="Ícone do telefone adicional na assinatura"><option value="telefone" selected>Telefone</option><option value="celular">Celular</option><option value="whatsapp">WhatsApp</option></select><button type="button" class="tel-remove" id="celRemover" aria-label="Remover telefone adicional" title="Remover telefone adicional"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
                     <button type="button" class="tel-add" id="celAdicionar">+ Adicionar outro telefone</button>
@@ -362,7 +369,7 @@
             return '(' + d.slice(0, 2) + ') ' + n;
         }
         function draw() {
-            ctx.clearRect(0, 0, c.width, c.height); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); const nome = document.getElementById('nome').value.trim(); const oy = nome ? 0 : -84; const cargo = titleCase(document.getElementById('cargo').value.trim()); const oabN = formatOab(document.getElementById('oab').value); const setor = titleCase(document.getElementById('setor').value.trim()); const telD = document.getElementById('telefone').value.replace(/\D/g, '').slice(0, 4); const telP = onlyPhone(document.getElementById('telPrefixo').value).replace(/\s+/g, ' ').trim(); const tel = telD ? telP + (/\)$/.test(telP) ? ' ' : '') + telD : ''; const cel = formatPhone(document.getElementById('celular').value); let email = document.getElementById('email').value.trim(); email = email.toLowerCase().replace(/\s/g, '').split('@')[0]; if (email) email += '@cohab.mg.gov.br';
+            ctx.clearRect(0, 0, c.width, c.height); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); const nome = document.getElementById('nome').value.trim(); const oy = nome ? 0 : -84; const cargo = titleCase(document.getElementById('cargo').value.trim()); const oabN = formatOab(document.getElementById('oab').value); const setor = titleCase(document.getElementById('setor').value.trim()); const telD = document.getElementById('telefone').value.replace(/\D/g, '').slice(0, 4); const telBaseDigits = document.getElementById('telBase').value.replace(/\D/g, '').slice(0, 6); const telDDD = telBaseDigits.slice(0, 2); const telP = telBaseDigits.slice(2, 6); const tel = telD && telDDD.length === 2 && telP.length === 4 ? `(${telDDD}) ${telP}-${telD}` : ''; const cel = formatPhone(document.getElementById('celular').value); let email = document.getElementById('email').value.trim(); email = email.toLowerCase().replace(/\s/g, '').split('@')[0]; if (email) email += '@cohab.mg.gov.br';
             ctx.textBaseline = 'alphabetic'; ctx.fillStyle = terr; const nomeUp = nome.toLocaleUpperCase('pt-BR'); let nomeSize = 66; ctx.font = 'bold 66px Arial,sans-serif'; const nomeW = ctx.measureText(nomeUp).width; if (nomeW > 1728) { nomeSize = 66 * 1728 / nomeW; ctx.font = 'bold ' + nomeSize + 'px Arial,sans-serif'; } if (nome) ctx.fillText(nomeUp, 160, 174); 
             // números: o primeiro preenchido ocupa a posição original; o segundo só entra se couber
             const extraOn = !document.getElementById('celExtra').hidden;
@@ -391,7 +398,7 @@
             if (items.length) { ctx.fillStyle = gray; ctx.beginPath(); ctx.roundRect(1260, top, 8, Math.max(112, pos[pos.length - 1] + 36 - top), 4); ctx.fill() }
             const lines = []; if (cargo) lines.push({ t: cargo, f: 'bold 56px Arial,sans-serif' }); if (oabN) lines.push({ t: 'OAB/MG ' + oabN, f: 'bold 56px Arial,sans-serif' }); if (setor) lines.push({ t: setor, f: '52px Arial,sans-serif' });
             // o bloco da esquerda segue a composição original (sem o número adicional), para não se deslocar
-            let ly = 252 + oy; // Posicionamento fixo: os telefones nunca deslocam cargo ou setor.
+            let ly = 285 + oy; // Posicionamento fixo: os telefones nunca deslocam cargo ou setor.
             ctx.fillStyle = gray; lines.forEach((l, i) => { ctx.font = l.f; ctx.fillText(l.t, 160, ly + 62 * i, 1000); });
             items.forEach((it, i) => {
                 const y0 = pos[i]; ctx.fillStyle = dark;
@@ -414,7 +421,7 @@
             ctx.strokeStyle = '#999'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(660, 560); ctx.lineTo(690, 590); ctx.lineTo(660, 620); ctx.stroke(); globe(890, 591); ctx.fillStyle = gray; ctx.font = 'bold 42px Arial,sans-serif'; ctx.fillText('www.cohab.mg.gov.br', 950, 607, 440); insta(1570, 591); ctx.fillStyle = gray; ctx.font = 'bold 42px Arial,sans-serif'; ctx.fillText('@cohabminas', 1625, 607, 380);
             pin(140, 744); ctx.fillStyle = gray; ctx.font = 'bold 47px Arial,sans-serif'; const end = ENDERECOS[document.getElementById('endereco').value] || ENDERECOS['cidade-administrativa']; ctx.fillText(end[0], 198, 746, 1740); ctx.fillText(end[1], 198, 804, 1740);
         }
-        ['nome', 'cargo', 'oab', 'setor', 'telPrefixo', 'telefone', 'celular', 'celular2', 'email'].forEach(id => document.getElementById(id).addEventListener('input', draw)); ['endereco', 'celIcone', 'celIcone2'].forEach(id => { const el = document.getElementById(id); el.addEventListener('input', draw); el.addEventListener('change', draw); }); logo.onload = draw; document.getElementById('limpar').onclick = () => { setExtra(false); ['nome', 'cargo', 'oab', 'setor', 'telPrefixo', 'telefone', 'celular', 'celular2', 'email'].forEach(id => { const el = document.getElementById(id); el.value = id === 'telPrefixo' ? '(31) 3915-' : ''; el.dispatchEvent(new Event('input', { bubbles: true })); }); ['endereco', 'celIcone', 'celIcone2'].forEach(id => { const el = document.getElementById(id); el.selectedIndex = 0; el.dispatchEvent(new Event('change', { bubbles: true })); }); draw(); document.getElementById('nome').focus(); };
+        ['nome', 'cargo', 'oab', 'setor', 'telBase', 'telefone', 'celular', 'celular2', 'email'].forEach(id => document.getElementById(id).addEventListener('input', draw)); ['endereco', 'celIcone', 'celIcone2'].forEach(id => { const el = document.getElementById(id); el.addEventListener('input', draw); el.addEventListener('change', draw); }); logo.onload = draw; document.getElementById('limpar').onclick = () => { setExtra(false); ['nome', 'cargo', 'oab', 'setor', 'telBase', 'telefone', 'celular', 'celular2', 'email'].forEach(id => { const el = document.getElementById(id); el.value = id === 'telBase' ? '(31) 3915' : ''; el.dispatchEvent(new Event('input', { bubbles: true })); }); ['endereco', 'celIcone', 'celIcone2'].forEach(id => { const el = document.getElementById(id); el.selectedIndex = 0; el.dispatchEvent(new Event('change', { bubbles: true })); }); draw(); document.getElementById('nome').focus(); };
         // adicionar / remover o telefone adicional (no máximo um)
         function setExtra(on) {
             const row = document.getElementById('celExtra'), add = document.getElementById('celAdicionar'), inp = document.getElementById('celular2');
@@ -448,7 +455,7 @@
             const prev = document.querySelector('.preview'), btn = document.getElementById('exportar'), toast = document.getElementById('toast');
             const label = btn.textContent; let t1, t2;
             function pulse() { prev.classList.remove('tick'); void prev.offsetWidth; prev.classList.add('tick'); }
-            ['nome', 'cargo', 'oab', 'setor', 'telPrefixo', 'telefone', 'celular', 'celular2', 'email'].forEach(id => document.getElementById(id).addEventListener('input', pulse));
+            ['nome', 'cargo', 'oab', 'setor', 'telBase', 'telefone', 'celular', 'celular2', 'email'].forEach(id => document.getElementById(id).addEventListener('input', pulse));
             ['celAdicionar', 'celRemover'].forEach(id => document.getElementById(id).addEventListener('click', pulse));
             ['endereco', 'celIcone', 'celIcone2'].forEach(id => document.getElementById(id).addEventListener('change', pulse));
             document.getElementById('limpar').addEventListener('click', pulse);
@@ -492,46 +499,57 @@
 
     <script>
         (function () {
-            const pref = document.getElementById('telPrefixo'), num = document.getElementById('telefone'), g = document.getElementById('telGroup'), mir = document.getElementById('telMirror'), DEF = '(31) 3915-';
-            function fit() { mir.textContent = pref.value || ' '; pref.style.width = Math.ceil(mir.getBoundingClientRect().width) + 3 + 'px'; }
-            function fitNum() {
-                num.style.minWidth = '6ch';
-                if (!num.value) { num.style.width = '6ch'; return; }
-                mir.textContent = num.value; num.style.width = Math.ceil(mir.getBoundingClientRect().width) + 3 + 'px';
+            const baseField = document.getElementById('telBase');
+            const finalField = document.getElementById('telefone');
+            const fields = [baseField, finalField];
+            const clean = value => String(value || '').replace(/\D/g, '');
+            function formatBase(value) {
+                const digits = clean(value).slice(0, 6);
+                if (!digits) return '';
+                const ddd = digits.slice(0, 2);
+                const prefixo = digits.slice(2, 6);
+                let out = '';
+                if (ddd) out += `(${ddd}`;
+                if (ddd.length === 2) out += ')';
+                if (prefixo) out += ` ${prefixo}`;
+                
+                return out;
             }
-            function fire() { pref.dispatchEvent(new Event('input', { bubbles: true })); num.dispatchEvent(new Event('input', { bubbles: true })); }
-            // número completo colado: reconhece o prefixo padrão ou troca pelo prefixo informado
-            function fromFull(text) {
-                const clean = onlyPhone(text).replace(/\s+/g, ' ').trim(), d = clean.replace(/\D/g, ''), plus = /^\+/.test(clean);
-                if (d.length < 8) return false;
-                if (!plus && d.length >= 10 && d.startsWith('313915')) { pref.value = DEF; num.value = d.slice(6, 10); }
-                else {
-                    let f = clean;
-                    if (!plus && (d.length === 10 || d.length === 11)) f = formatPhone(clean);
-                    else if (!plus && (d.length === 8 || d.length === 9)) f = d.slice(0, -4) + '-' + d.slice(-4);
-                    let cnt = 0, i = f.length; while (i > 0 && cnt < 4) { i--; if (/\d/.test(f[i])) cnt++; }
-                    pref.value = f.slice(0, i); num.value = f.slice(i).replace(/\D/g, '').slice(0, 4);
-                }
-                fire(); return true;
+            function setFull(text) {
+                let digits = clean(text);
+                if (digits.length === 12 && digits.startsWith('55')) digits = digits.slice(2);
+                if (digits.length !== 10) return false;
+                baseField.value = formatBase(digits.slice(0, 6));
+                finalField.value = digits.slice(6, 10);
+                fields.forEach(el => el.dispatchEvent(new Event('input', { bubbles: true })));
+                return true;
             }
-            num.addEventListener('input', () => { num.value = num.value.replace(/\D/g, '').slice(0, 4); fitNum(); });
-            pref.addEventListener('input', () => {
-                const old = pref.value, pos = pref.selectionStart, nv = onlyPhone(old);
-                if (nv !== old) { pref.value = nv; const np = onlyPhone(old.slice(0, pos)).length; pref.setSelectionRange(np, np); }
-                fit();
+            baseField.addEventListener('input', () => {
+                const formatted = formatBase(baseField.value);
+                if (baseField.value !== formatted) baseField.value = formatted;
+                if (clean(baseField.value).length === 6 && document.activeElement === baseField) finalField.focus();
             });
-            const getText = e => (e.clipboardData || window.clipboardData).getData('text');
-            num.addEventListener('paste', e => {
-                e.preventDefault(); const t = getText(e);
-                if (!fromFull(t)) { num.value = t.replace(/\D/g, '').slice(0, 4); fire(); }
+            baseField.addEventListener('paste', event => {
+                const text = event.clipboardData.getData('text');
+                if (setFull(text)) { event.preventDefault(); finalField.focus(); return; }
+                event.preventDefault();
+                baseField.value = formatBase(text);
+                baseField.dispatchEvent(new Event('input', { bubbles: true }));
             });
-            pref.addEventListener('paste', e => {
-                e.preventDefault(); const t = getText(e);
-                if (!fromFull(t)) { pref.setRangeText(onlyPhone(t), pref.selectionStart, pref.selectionEnd, 'end'); pref.dispatchEvent(new Event('input', { bubbles: true })); }
+            finalField.addEventListener('input', () => {
+                const digits = clean(finalField.value).slice(0, 4);
+                if (finalField.value !== digits) finalField.value = digits;
             });
-            g.addEventListener('mousedown', e => { if (e.target !== num && e.target !== pref) { e.preventDefault(); num.focus(); } });
-            if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fit(); fitNum(); });
-            fit(); fitNum();
+            finalField.addEventListener('paste', event => {
+                const text = event.clipboardData.getData('text');
+                if (setFull(text)) { event.preventDefault(); finalField.focus(); return; }
+                event.preventDefault();
+                finalField.value = clean(text).slice(0, 4);
+                finalField.dispatchEvent(new Event('input', { bubbles: true }));
+            });
+            finalField.addEventListener('keydown', event => {
+                if (event.key === 'Backspace' && !finalField.value) baseField.focus();
+            });
         })();
     </script>
 

@@ -1,5 +1,5 @@
 /* Cohab Minas | Assinatura: cache versionado e totalmente local. */
-const CACHE_NAME = 'cohab-assinatura-v2';
+const CACHE_NAME = 'cohab-assinatura-v1';
 const APP_SHELL = [
   './',
   './index.html',
